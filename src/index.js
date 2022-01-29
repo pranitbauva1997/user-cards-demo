@@ -1,29 +1,34 @@
 import React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import {AiOutlineGlobal, AiOutlineMail} from 'react-icons/ai';
+import {BiPhoneCall} from 'react-icons/bi';
 
 function UserWebsite(props) {
   const website = "http://" + props.website;
   return (
-      <div>
+      <span>
+        <AiOutlineGlobal />
         <a href={website}>{props.website}</a>
-      </div>
+      </span>
   );
 }
 
 function UserContactDetail(props) {
   return (
-      <div>
+      <span>
+        <BiPhoneCall />
         <p>{props.phone}</p>
-      </div>
+      </span>
   );
 }
 
 function UserEmail(props) {
   return (
-      <div>
+      <span>
+        <AiOutlineMail/>
         <p>{props.email}</p>
-      </div>
+      </span>
   );
 }
 
@@ -50,7 +55,7 @@ function UserCardCover(props) {
   const src = "https://avatars.dicebear.com/v2/avataaars/" + props.username + ".svg?options[mood][]=happy";
   return (
       <div className="image">
-        <img src={src}/>
+        <img src={src} alt="Placeholder"/>
       </div>
   );
 }
