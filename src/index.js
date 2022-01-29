@@ -1,7 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom';
+import Modal from 'react-modal';
 import './index.css';
-import {AiFillHeart, AiOutlineEdit, AiOutlineGlobal, AiOutlineHeart, AiOutlineMail} from 'react-icons/ai';
+import {
+  AiFillHeart,
+  AiOutlineClose,
+  AiOutlineEdit,
+  AiOutlineGlobal,
+  AiOutlineHeart,
+  AiOutlineMail
+} from 'react-icons/ai';
 import {BiPhoneCall, BiTrash} from 'react-icons/bi';
 
 function UserWebsite(props) {
@@ -55,7 +63,7 @@ function UserCardButtons(props) {
       <ul className="card-buttons">
         {lovedButton}
         <li className="li-button">
-          <button className="button"><AiOutlineEdit/></button>
+          <button className="button" onClick={props.onClickEditOpen}><AiOutlineEdit/></button>
         </li>
         <li className="li-button">
           <button className="button" onClick={props.onClickDelete}><BiTrash/></button>
@@ -89,7 +97,12 @@ function UserCard(props) {
       <div className="card">
         <UserCardCover username={props.username}/>
         <UserCardBody name={props.name} email={props.email} phone={props.phone} website={props.website}/>
-        <UserCardButtons isLoved={props.isLoved} onClickDelete={props.onClickDelete} onClickLove={props.onClickLove}/>
+        <UserCardButtons
+            isLoved={props.isLoved}
+            onClickDelete={props.onClickDelete}
+            onClickLove={props.onClickLove}
+            onClickEditOpen={props.onClickEditOpen}
+        />
       </div>
   );
 }
@@ -98,6 +111,8 @@ function UsersPage() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [users, setUsers] = useState([]);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [idEditUser, setIdEditUser] = useState(null);
 
   useEffect(() => {
         fetch("https://jsonplaceholder.typicode.com/users")
@@ -114,6 +129,18 @@ function UsersPage() {
             )
       }, []
   )
+
+  function openEditModal(id) {
+    setIsEditOpen(true);
+    setIdEditUser(id);
+  }
+
+  function afterOpenEditModal() {
+  }
+
+  function closeEditModal() {
+    setIsEditOpen(false);
+  }
 
   let toggleLoveUser = (id) => {
     let i;
@@ -138,9 +165,24 @@ function UsersPage() {
         break;
       }
     }
-    let newUsers = [].concat(users.slice(0, i), users.slice(i + 1, users.length))
-    console.log(newUsers);
+    const newUsers = [].concat(users.slice(0, i), users.slice(i + 1, users.length))
     setUsers(newUsers);
+  }
+
+  let editUser = (id, name, email, phone, website) => {
+    for (let i = 0; i < users.length; i++) {
+      if (id === users[i].id) {
+        let newUser = users[i];
+        newUser.name = name;
+        newUser.email = email;
+        newUser.phone = phone;
+        newUser.website = website;
+        const newUsers = [].concat(users.slice(0, i), [newUser], users.slice(i + 1, users.length))
+        setUsers(newUsers);
+        closeEditModal();
+        break;
+      }
+    }
   }
 
   let getUserCard = (i) => {
@@ -150,6 +192,7 @@ function UsersPage() {
             key={id} name={name} username={username} email={email} phone={phone} website={website}
             onClickDelete={() => handleDeleteUser(id)}
             onClickLove={() => toggleLoveUser(id)}
+            onClickEditOpen={() => openEditModal(id)}
             isLoved={users[i].isLoved}
         />)
   }
@@ -163,13 +206,111 @@ function UsersPage() {
     for (let i = 0; i < users.length; i++) {
       rows.push(getUserCard(i))
     }
+
+    const customStyles = {
+      content: {
+        width: '40%',
+        height: '50%',
+        margin: 'auto',
+        marginTop: 'auto',
+      },
+    };
+
+    let user = null;
+    if (isEditOpen) {
+      for (let i = 0; i < users.length; i++) {
+        if (idEditUser === users[i].id) {
+          user = users[i];
+          break;
+        }
+      }
+    }
+
     return (
-        <div className="page">
-          {rows}
+        <div>
+          <div className="page">
+            {rows}
+          </div>
+          <Modal
+              isOpen={isEditOpen}
+              onAfterOpen={afterOpenEditModal}
+              onRequestClose={closeEditModal}
+              contentLabel="Example Modal"
+              style={customStyles}
+          >
+            {isEditOpen ?
+                <UserModal closeEditModal={closeEditModal} editUser={editUser} user={user}/>
+                :
+                <UserModal closeEditModal={closeEditModal} editUser={editUser}/>
+            }
+
+          </Modal>
         </div>
     );
   }
-
 }
 
+function UserModal(props) {
+  let defaultName, defaultEmail, defaultPhone, defaultWebsite;
+  if (props.user) {
+    defaultName = props.user.name;
+    defaultEmail = props.user.email;
+    defaultPhone = props.user.phone;
+    defaultWebsite = props.user.website;
+  }
+  const [name, setName] = useState(defaultName);
+  const [email, setEmail] = useState(defaultEmail);
+  const [phone, setPhone] = useState(defaultPhone);
+  const [website, setWebsite] = useState(defaultWebsite);
+  return (
+      <div>
+        <div className="modal-header">
+          <p>Edit User</p>
+          <button onClick={props.closeEditModal}><AiOutlineClose/></button>
+        </div>
+        <div className="modal-body">
+          <form>
+            <div>
+              <label>Name</label>
+              <input
+                  type="text"
+                  defaultValue={defaultName}
+                  onChange={(event) => setName(event.target.value)}
+              />
+            </div>
+            <div>
+              <label>Email</label>
+              <input
+                  type="text"
+                  defaultValue={defaultEmail}
+                  onChange={(event) => setEmail(event.target.value)}
+              />
+            </div>
+            <div>
+              <label>Phone</label>
+              <input
+                  type="text"
+                  defaultValue={defaultPhone}
+                  onChange={(event) => setPhone(event.target.value)}
+              />
+            </div>
+            <div>
+              <label>Website</label>
+              <input
+                  type="text"
+                  defaultValue={defaultWebsite}
+                  onChange={(event) => setWebsite(event.target.value)}
+              />
+            </div>
+          </form>
+        </div>
+        <div className="modal-footer">
+          <button onClick={props.closeEditModal}>Cancel</button>
+          <button onClick={() => props.editUser(props.user.id, name, email, phone, website)}>OK</button>
+        </div>
+      </div>
+  );
+}
+
+Modal.setAppElement('#root');
 ReactDOM.render(<UsersPage/>, document.getElementById('root'));
