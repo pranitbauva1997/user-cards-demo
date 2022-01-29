@@ -29,6 +29,25 @@
   margin: 5px;
 }
 
+.card-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+  list-style: none;
+  padding: 0px;
+}
+
+.li-button {
+  width: 33.333%;
+  line-height: inherit;
+}
+
+.button {
+  width: 100%;
+  border-radius: 0px;
+}
+
 .image {
   width: 100%;
   max-height: 200px;

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import {AiOutlineGlobal, AiOutlineMail} from 'react-icons/ai';
-import {BiPhoneCall} from 'react-icons/bi';
+import {AiOutlineEdit, AiOutlineGlobal, AiOutlineHeart, AiOutlineMail} from 'react-icons/ai';
+import {BiPhoneCall, BiTrash} from 'react-icons/bi';
 
 function UserWebsite(props) {
   const website = "http://" + props.website;
@@ -40,6 +40,23 @@ function UserName(props) {
   );
 }
 
+function UserCardButtons(props) {
+  return (
+      <ul className="card-buttons">
+        {/*AiFillHeart*/}
+        <li className="li-button">
+          <button className="button"><AiOutlineHeart/></button>
+        </li>
+        <li className="li-button">
+          <button className="button"><AiOutlineEdit/></button>
+        </li>
+        <li className="li-button">
+          <button className="button"><BiTrash/></button>
+        </li>
+      </ul>
+  )
+}
+
 function UserCardBody(props) {
   return (
       <div className="card-body">
@@ -54,7 +71,9 @@ function UserCardBody(props) {
 function UserCardCover(props) {
   const src = "https://avatars.dicebear.com/v2/avataaars/" + props.username + ".svg?options[mood][]=happy";
   return (
-      <img className="image" src={src} alt="Placeholder"/>
+      <div>
+        <img className="image" src={src} alt="Placeholder"/>
+      </div>
   );
 }
 
@@ -63,6 +82,7 @@ function UserCard(props) {
       <div className="card">
         <UserCardCover username={props.username}/>
         <UserCardBody name={props.name} email={props.email} phone={props.phone} website={props.website}/>
+        <UserCardButtons/>
       </div>
   );
 }
