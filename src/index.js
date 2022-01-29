@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function UserWebsite(props) {
-  const website = props.website;
+  const website = "http://" + props.website;
   return (
       <div>
-        <a src={website}>{website}</a>
+        <a href={website}>{props.website}</a>
       </div>
   );
 }
