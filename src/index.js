@@ -68,75 +68,29 @@ class UsersPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      users: [
-        {
-          id: 1,
-          name: "Pranit Bauva",
-          username: "pranitbauva1997",
-          email: "pranit@bauva.com",
-          phone: "+91 9932433282",
-          website: "https://bauva.com",
-        },
-        {
-          id: 2,
-          name: "Pranit Bauva",
-          username: "pranitbauva1997",
-          email: "pranit@bauva.com",
-          phone: "+91 9932433282",
-          website: "https://bauva.com",
-        },
-        {
-          id: 3,
-          name: "Pranit Bauva",
-          username: "pranitbauva1997",
-          email: "pranit@bauva.com",
-          phone: "+91 9932433282",
-          website: "https://bauva.com",
-        },
-        {
-          id: 4,
-          name: "Pranit Bauva",
-          username: "pranitbauva1997",
-          email: "pranit@bauva.com",
-          phone: "+91 9932433282",
-          website: "https://bauva.com",
-        },
-        {
-          id: 5,
-          name: "Pranit Bauva",
-          username: "pranitbauva1997",
-          email: "pranit@bauva.com",
-          phone: "+91 9932433282",
-          website: "https://bauva.com",
-        },
-        {
-          id: 6,
-          name: "Pranit Bauva",
-          username: "pranitbauva1997",
-          email: "pranit@bauva.com",
-          phone: "+91 9932433282",
-          website: "https://bauva.com",
-        },
-        {
-          id: 7,
-          name: "Pranit Bauva",
-          username: "pranitbauva1997",
-          email: "pranit@bauva.com",
-          phone: "+91 9932433282",
-          website: "https://bauva.com",
-        },
-        {
-          id: 8,
-          name: "Pranit Bauva",
-          username: "pranitbauva1997",
-          email: "pranit@bauva.com",
-          phone: "+91 9932433282",
-          website: "https://bauva.com",
-        },
-      ],
+      users: [],
       isLoaded: false,
       error: null,
     };
+  }
+
+  componentDidMount() {
+    fetch("https://jsonplaceholder.typicode.com/users")
+        .then(res => res.json())
+        .then((result) => {
+          console.log(result.items);
+              this.setState({
+                isLoaded: true,
+                users: result,
+              });
+            },
+            (error) => {
+              this.setState({
+                isLoaded: true,
+                error,
+              });
+            }
+        )
   }
 
   getUserCard(i) {
@@ -145,16 +99,22 @@ class UsersPage extends React.Component {
   }
 
   render() {
-    let users = this.state.users;
-    let rows = [];
-    for (let i = 0; i < users.length; i++) {
-      rows.push(this.getUserCard(i))
+    let {users, isLoaded, error} = this.state;
+    if (error) {
+      return <div>Error: {error.message}</div>;
+    } else if (!isLoaded) {
+      return <div>Loading...</div>;
+    } else {
+      let rows = [];
+      for (let i = 0; i < users.length; i++) {
+        rows.push(this.getUserCard(i))
+      }
+      return (
+          <div className="page">
+            {rows}
+          </div>
+      );
     }
-    return (
-        <div className="page">
-          {rows}
-        </div>
-    );
   }
 }
 
