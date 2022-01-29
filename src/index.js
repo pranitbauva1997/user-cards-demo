@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import {AiOutlineEdit, AiOutlineGlobal, AiOutlineHeart, AiOutlineMail} from 'react-icons/ai';
+import {AiFillHeart, AiOutlineEdit, AiOutlineGlobal, AiOutlineHeart, AiOutlineMail} from 'react-icons/ai';
 import {BiPhoneCall, BiTrash} from 'react-icons/bi';
 
 function UserWebsite(props) {
@@ -41,12 +41,19 @@ function UserName(props) {
 }
 
 function UserCardButtons(props) {
+  let lovedButton;
+  if (props.isLoved) {
+    lovedButton = <li className="li-button">
+      <button className="button" onClick={props.onClickLove}><AiFillHeart/></button>
+    </li>
+  } else {
+    lovedButton = <li className="li-button">
+      <button className="button" onClick={props.onClickLove}><AiOutlineHeart/></button>
+    </li>
+  }
   return (
       <ul className="card-buttons">
-        {/*AiFillHeart*/}
-        <li className="li-button">
-          <button className="button"><AiOutlineHeart/></button>
-        </li>
+        {lovedButton}
         <li className="li-button">
           <button className="button"><AiOutlineEdit/></button>
         </li>
@@ -82,7 +89,7 @@ function UserCard(props) {
       <div className="card">
         <UserCardCover username={props.username}/>
         <UserCardBody name={props.name} email={props.email} phone={props.phone} website={props.website}/>
-        <UserCardButtons onClickDelete={props.onClickDelete}/>
+        <UserCardButtons isLoved={props.isLoved} onClickDelete={props.onClickDelete} onClickLove={props.onClickLove}/>
       </div>
   );
 }
@@ -108,6 +115,22 @@ function UsersPage() {
       }, []
   )
 
+  let toggleLoveUser = (id) => {
+    let i;
+    for (i = 0; i < users.length; i++) {
+      if (id === users[i].id) {
+        let newUsers = users.slice()
+        if (users[i].isLoved) {
+          newUsers[i].isLoved = false;
+        } else {
+          newUsers[i].isLoved = true;
+        }
+        setUsers(newUsers);
+        break;
+      }
+    }
+  }
+
   let handleDeleteUser = (id) => {
     let i;
     for (i = 0; i < users.length; i++) {
@@ -115,14 +138,20 @@ function UsersPage() {
         break;
       }
     }
-    let newUsers = [].concat(users.slice(0, i), users.slice(i+1, users.length))
+    let newUsers = [].concat(users.slice(0, i), users.slice(i + 1, users.length))
     console.log(newUsers);
     setUsers(newUsers);
   }
 
   let getUserCard = (i) => {
     const {id, name, username, email, phone, website} = users[i];
-    return <UserCard key={id} name={name} username={username} email={email} phone={phone} website={website} onClickDelete={() => handleDeleteUser(id)}/>
+    return (
+        <UserCard
+            key={id} name={name} username={username} email={email} phone={phone} website={website}
+            onClickDelete={() => handleDeleteUser(id)}
+            onClickLove={() => toggleLoveUser(id)}
+            isLoved={users[i].isLoved}
+        />)
   }
 
   if (error) {
