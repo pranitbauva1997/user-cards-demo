@@ -10,14 +10,27 @@
 .card {
   margin: 20px;
   border: 1px solid #e8e8e8;
-  max-width: 200px;
+  width: 300px;
+  border-radius: 5px;
 }
 
 .card-body {
   padding: 20px;
 }
 
+.user-body-detail {
+  display: flex;
+  flex-direction: row;
+  white-space: nowrap;
+}
+
+.user-body-detail-text {
+  text-align: center;
+  margin: 5px;
+}
+
 .image {
+  width: 100%;
   max-height: 200px;
   background-color: #f5f5f5;
 }

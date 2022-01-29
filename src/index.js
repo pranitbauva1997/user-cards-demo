@@ -7,27 +7,27 @@ import {BiPhoneCall} from 'react-icons/bi';
 function UserWebsite(props) {
   const website = "http://" + props.website;
   return (
-      <span>
-        <AiOutlineGlobal />
-        <a href={website}>{props.website}</a>
+      <span className="user-body-detail">
+        <AiOutlineGlobal className="user-body-detail-text"/>
+        <a className="user-body-detail-text" href={website}>{props.website}</a>
       </span>
   );
 }
 
 function UserContactDetail(props) {
   return (
-      <span>
-        <BiPhoneCall />
-        <p>{props.phone}</p>
+      <span className="user-body-detail">
+        <BiPhoneCall className="user-body-detail-text"/>
+        <p className="user-body-detail-text">{props.phone}</p>
       </span>
   );
 }
 
 function UserEmail(props) {
   return (
-      <span>
-        <AiOutlineMail/>
-        <p>{props.email}</p>
+      <span className="user-body-detail">
+        <AiOutlineMail className="user-body-detail-text"/>
+        <p className="user-body-detail-text">{props.email}</p>
       </span>
   );
 }
@@ -54,9 +54,7 @@ function UserCardBody(props) {
 function UserCardCover(props) {
   const src = "https://avatars.dicebear.com/v2/avataaars/" + props.username + ".svg?options[mood][]=happy";
   return (
-      <div className="image">
-        <img src={src} alt="Placeholder"/>
-      </div>
+      <img className="image" src={src} alt="Placeholder"/>
   );
 }
 
