@@ -51,7 +51,7 @@ function UserCardButtons(props) {
           <button className="button"><AiOutlineEdit/></button>
         </li>
         <li className="li-button">
-          <button className="button"><BiTrash/></button>
+          <button className="button" onClick={props.onClickDelete}><BiTrash/></button>
         </li>
       </ul>
   )
@@ -82,7 +82,7 @@ function UserCard(props) {
       <div className="card">
         <UserCardCover username={props.username}/>
         <UserCardBody name={props.name} email={props.email} phone={props.phone} website={props.website}/>
-        <UserCardButtons/>
+        <UserCardButtons onClickDelete={props.onClickDelete}/>
       </div>
   );
 }
@@ -108,9 +108,21 @@ function UsersPage() {
       }, []
   )
 
+  let handleDeleteUser = (id) => {
+    let i;
+    for (i = 0; i < users.length; i++) {
+      if (id === users[i].id) {
+        break;
+      }
+    }
+    let newUsers = [].concat(users.slice(0, i), users.slice(i+1, users.length))
+    console.log(newUsers);
+    setUsers(newUsers);
+  }
+
   let getUserCard = (i) => {
     const {id, name, username, email, phone, website} = users[i];
-    return <UserCard key={id} name={name} username={username} email={email} phone={phone} website={website}/>
+    return <UserCard key={id} name={name} username={username} email={email} phone={phone} website={website} onClickDelete={() => handleDeleteUser(id)}/>
   }
 
   if (error) {
