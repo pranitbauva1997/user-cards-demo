@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/user-cards-demo/static/css/main.c8257a2c.css",
+    "main.js": "/user-cards-demo/static/js/main.41b177cc.js",
+    "index.html": "/user-cards-demo/index.html",
+    "main.c8257a2c.css.map": "/user-cards-demo/static/css/main.c8257a2c.css.map",
+    "main.41b177cc.js.map": "/user-cards-demo/static/js/main.41b177cc.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c8257a2c.css",
+    "static/js/main.41b177cc.js"
+  ]
+}
